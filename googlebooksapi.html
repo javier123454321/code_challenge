@@ -1,35 +1,26 @@
 <html>
   <head>
-    <title>Books API Example</title>
+    <title>8th Light - Code Challenge</title>
   </head>
   <body>
     <div id="content">
     </div>
-    <form class="" action="index.html" onsubmit="loadBooks()">
-
+    <form id="searchBooksForm">
+      <input type="text" id="query" placeholder="Search Books">
+      <button id="searchButton" type="submit" name="button">Search</button>
     </form>
-    <input type="text" id="query" placeholder="Search books">
-    <button id="searchButton" type="submit" name="button">Search</button>
 
-    </form>
     <script>
-    //   function searchBooks(response){
-    //   for (let i = 0; i < 5; i++) {
-    //     let item = response.items[i];
-    //     // in production code, item.text should have the HTML entities escaped.
-    //     document.getElementById("content").innerHTML += "<br>"
-    //     document.getElementById("content").innerHTML += "<br>" + item.volumeInfo.title;
-    //     console.log(response);
-    //   }
-    // }
-
-    document.getElementById("searchButton").addEventListener("click", function(){
-      loadBooks();
+    document.getElementById("searchBooksForm").addEventListener('submit', e => {
+        loadBooks();
+        // Prevent the default form submit
+        e.preventDefault();
     });
 
     function loadBooks() {
       //Loading the books using an async call
       let query = document.getElementById("query").value;
+      document.getElementById("query").value = "";
       // Because we are not submitting a form through the browser, I am formating the query
       // and appending it to the url of the api to mimic a GET function
       query = query.replace(" ", "+");
@@ -41,9 +32,9 @@
 
          let info =(JSON.parse(this.responseText));
          getFiveItems(info)
-      // } else if(this.readyState == 4 && this.status != 200){
-      //      console.log("There has been an error with the http request, try checking the values you submitted on the form");
-      //      console.log(JSON.parse(this.responseText));
+       } else if(this.readyState == 4 && this.status != 200){
+           console.log("There has been an error with the http request, try checking the values you submitted on the form");
+           console.log(JSON.parse(this.responseText));
           }
         };
       xhr.open("GET", baseURL, true);
@@ -51,8 +42,7 @@
     }
 
     function getFiveItems(jsonBooks){
-      //This reads a JSON string from the google books API and formats it in a way which is according to the assignment
-      //that is gives the following info: Author(s), title of the book, publishing house on the console
+      //Print the first 5 query items
       let listLength = jsonBooks.items.length;
       if (listLength != 0){
           for (let i = 0; i < listLength; i++) {
@@ -66,6 +56,7 @@
       }
 
       function printBookInfo(book, i){
+        //Format how book items are printed for user
         console.log("Entry " + (i+1));
         console.log(book.volumeInfo.authors[0]);
         console.log(book.volumeInfo.title);
