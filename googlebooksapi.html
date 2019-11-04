@@ -13,20 +13,29 @@
     <script>
     document.getElementById("searchBooksForm").addEventListener('submit', e => {
         loadBooks();
+        setTimeout(function(){
+          console.log("Select entry number to add book to your reading list:");
+        }, 1000);
         // Prevent the default form submit
         e.preventDefault();
     });
 
     function loadBooks() {
       //Loading the books using an async call
+
       let query = document.getElementById("query").value;
       document.getElementById("query").value = "";
-      // Because we are not submitting a form through the browser, I am formating the query
-      // and appending it to the url of the api to mimic a GET function
-      query = query.replace(" ", "+");
-      let baseURL = "https://www.googleapis.com/books/v1/volumes?q=" + query;
+      // Appending query to the url of the api to mimic a GET function
 
-      let xhr = new XMLHttpRequest();
+      //A bit of string sanitization and formatting for the request
+      //The only special character not allowed is the plus (+) sign which would confuse the query
+      query = query.trim();
+      query = query.replace("+", "")
+      query = query.replace(" ", "+");
+
+      const baseURL = "https://www.googleapis.com/books/v1/volumes?q=" + query;
+
+      const xhr = new XMLHttpRequest();
       xhr.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
 
@@ -43,13 +52,12 @@
 
     function getFiveItems(jsonBooks){
       //Print the first 5 query items
-      let listLength = jsonBooks.items.length;
+      const listLength = jsonBooks.items.length;
       if (listLength != 0){
           for (let i = 0; i < listLength; i++) {
             if(i == 5){break};
             printBookInfo(jsonBooks.items[i], i);
-
-          }
+            };
       } else{
         console.log("The query matched no books");
         };
@@ -57,12 +65,29 @@
 
       function printBookInfo(book, i){
         //Format how book items are printed for user
+        if(book){
+        const authors = book.volumeInfo.authors;
+        const title = book.volumeInfo.title;
+        const publisher = book.volumeInfo.publisher;
+
         console.log("Entry " + (i+1));
-        console.log(book.volumeInfo.authors[0]);
-        console.log(book.volumeInfo.title);
-        console.log(book.volumeInfo.publisher);
+        if (authors != undefined){
+          for(let j=0; j < authors.length; j++){
+            console.log("Author: "+ authors[j] );
+          }
+        }else{
+            console.log("Author: None");
+          }
+
+        console.log("Title: " +title);
+        console.log("Publisher: "+publisher);
         console.log(" ");
-      }
+          }
+        }
+
+
+
+
 
 
     </script>
