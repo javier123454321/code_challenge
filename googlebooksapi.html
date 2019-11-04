@@ -1,0 +1,74 @@
+<html>
+  <head>
+    <title>Books API Example</title>
+  </head>
+  <body>
+    <div id="content">
+    </div>
+    <form class="" action="index.html" onsubmit="loadBooks()">
+
+    </form>
+    <input type="text" id="query" placeholder="Search books">
+    <button id="searchButton" type="submit" name="button">Search</button>
+
+    </form>
+    <script>
+    //   function searchBooks(response){
+    //   for (let i = 0; i < 5; i++) {
+    //     let item = response.items[i];
+    //     // in production code, item.text should have the HTML entities escaped.
+    //     document.getElementById("content").innerHTML += "<br>"
+    //     document.getElementById("content").innerHTML += "<br>" + item.volumeInfo.title;
+    //     console.log(response);
+    //   }
+    // }
+
+    document.getElementById("searchButton").addEventListener("click", function(){
+      loadBooks();
+    });
+
+    function loadBooks() {
+      //Loading the books using an async call
+      let query = document.getElementById("query").value;
+      // Because we are not submitting a form through the browser, I am formating the query
+      // and appending it to the url of the api to mimic a GET function
+      query = query.replace(" ", "+");
+      let baseURL = "https://www.googleapis.com/books/v1/volumes?q=" + query;
+      console.log(baseURL);
+
+      let xhr = new XMLHttpRequest();
+      xhr.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+
+         let info =(JSON.parse(this.responseText));
+         logFiveItems(info)
+      // } else if(this.readyState == 4 && this.status != 200){
+      //      console.log("There has been an error with the http request, try checking the values you submitted on the form");
+      //      console.log(JSON.parse(this.responseText));
+          }
+        };
+      xhr.open("GET", baseURL, true);
+      xhr.send();
+    }
+
+    function logFiveItems(jsonBooks){
+      //This reads a JSON string from the google books API and formats it in a way which is according to the assignment
+      //that is gives the following info: Author(s), title of the book, publishing house on the console
+      if (jsonBooks.totalItems >= 5){
+        for (let i = 0; i < 5; i++) {
+          console.log("Entry " + (i+1));
+          console.log(jsonBooks.items[i].volumeInfo.authors[0]);
+          console.log(jsonBooks.items[i].volumeInfo.title);
+          console.log(jsonBooks.items[i].volumeInfo.publisher);
+        }}}
+      // }else if{
+      //   for (let i = 0; i < jsonBooks.items.length; i++){
+      //     console.log("Entry " + (i+1));
+      //     console.log(jsonBooks.items[i].volumeInfo.authors[0]);
+      //     console.log(jsonBooks.items[i].volumeInfo.title);
+      //     console.log(jsonBooks.items[i].volumeInfo.publisher);
+      //   }
+      // }}
+    </script>
+  </body>
+</html>
