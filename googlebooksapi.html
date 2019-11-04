@@ -34,14 +34,13 @@
       // and appending it to the url of the api to mimic a GET function
       query = query.replace(" ", "+");
       let baseURL = "https://www.googleapis.com/books/v1/volumes?q=" + query;
-      console.log(baseURL);
 
       let xhr = new XMLHttpRequest();
       xhr.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
 
          let info =(JSON.parse(this.responseText));
-         logFiveItems(info)
+         getFiveItems(info)
       // } else if(this.readyState == 4 && this.status != 200){
       //      console.log("There has been an error with the http request, try checking the values you submitted on the form");
       //      console.log(JSON.parse(this.responseText));
@@ -51,24 +50,30 @@
       xhr.send();
     }
 
-    function logFiveItems(jsonBooks){
+    function getFiveItems(jsonBooks){
       //This reads a JSON string from the google books API and formats it in a way which is according to the assignment
       //that is gives the following info: Author(s), title of the book, publishing house on the console
-      if (jsonBooks.totalItems >= 5){
-        for (let i = 0; i < 5; i++) {
-          console.log("Entry " + (i+1));
-          console.log(jsonBooks.items[i].volumeInfo.authors[0]);
-          console.log(jsonBooks.items[i].volumeInfo.title);
-          console.log(jsonBooks.items[i].volumeInfo.publisher);
-        }}}
-      // }else if{
-      //   for (let i = 0; i < jsonBooks.items.length; i++){
-      //     console.log("Entry " + (i+1));
-      //     console.log(jsonBooks.items[i].volumeInfo.authors[0]);
-      //     console.log(jsonBooks.items[i].volumeInfo.title);
-      //     console.log(jsonBooks.items[i].volumeInfo.publisher);
-      //   }
-      // }}
+      let listLength = jsonBooks.items.length;
+      if (listLength != 0){
+          for (let i = 0; i < listLength; i++) {
+            if(i == 5){break};
+            printBookInfo(jsonBooks.items[i], i);
+
+          }
+      } else{
+        console.log("The query matched no books");
+        };
+      }
+
+      function printBookInfo(book, i){
+        console.log("Entry " + (i+1));
+        console.log(book.volumeInfo.authors[0]);
+        console.log(book.volumeInfo.title);
+        console.log(book.volumeInfo.publisher);
+        console.log(" ");
+      }
+
+
     </script>
   </body>
 </html>
