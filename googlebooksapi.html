@@ -3,19 +3,20 @@
     <title>8th Light - Code Challenge</title>
   </head>
   <body>
-    <div id="content">
-    </div>
+
     <form id="searchBooksForm">
       <input type="text" id="query" placeholder="Search Books">
       <button id="searchButton" type="submit" name="button">Search</button>
     </form>
 
+    <div id="heading"></div>
+
+    <div id="content"></div>
+
     <script>
+
     document.getElementById("searchBooksForm").addEventListener('submit', e => {
         loadBooks();
-        setTimeout(function(){
-          console.log("Select entry number to add book to your reading list:");
-        }, 1000);
         // Prevent the default form submit
         e.preventDefault();
     });
@@ -33,14 +34,16 @@
       query = query.replace("+", "")
       query = query.replace(" ", "+");
 
-      const baseURL = "https://www.googleapis.com/books/v1/volumes?q=" + query;
+      const baseURL = "https://www.googleapis.com/books/v1/volumes?q="+query;
 
       const xhr = new XMLHttpRequest();
       xhr.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
 
          let info =(JSON.parse(this.responseText));
-         getFiveItems(info)
+         getNItems(info, 5);
+         addBookToList(info);
+
        } else if(this.readyState == 4 && this.status != 200){
            console.log("There has been an error with the http request, try checking the values you submitted on the form");
            console.log(JSON.parse(this.responseText));
@@ -50,46 +53,77 @@
       xhr.send();
     }
 
-    function getFiveItems(jsonBooks){
+    function getNItems(jsonBooks, num){
+      document.getElementById('heading').innerHTML = "";
+      document.getElementById("content").innerHTML = "";
       //Print the first 5 query items
-      const listLength = jsonBooks.items.length;
-      if (listLength != 0){
+      if (jsonBooks.totalItems != 0){
+        document.getElementById('heading').innerHTML =
+          "<h3>Select entry number to add book to your reading list:</h3>";
+
+        const listLength = jsonBooks.items.length;
           for (let i = 0; i < listLength; i++) {
-            if(i == 5){break};
+            if(i == num){break};
             printBookInfo(jsonBooks.items[i], i);
             };
-      } else{
-        console.log("The query matched no books");
+
+      }else{
+        document.getElementById('heading').innerHTML =
+          "<h3>The query matched no books</h3>";
         };
       }
 
-      function printBookInfo(book, i){
-        //Format how book items are printed for user
-        if(book){
-        const authors = book.volumeInfo.authors;
-        const title = book.volumeInfo.title;
-        const publisher = book.volumeInfo.publisher;
+    function printBookInfo(book, i){
+      //Format how book items are displayed for user
+      const authors = book.volumeInfo.authors;
+      const title = book.volumeInfo.title;
+      const publisher = book.volumeInfo.publisher;
 
-        console.log("Entry " + (i+1));
-        if (authors != undefined){
-          for(let j=0; j < authors.length; j++){
-            console.log("Author: "+ authors[j] );
-          }
-        }else{
-            console.log("Author: None");
-          }
-
-        console.log("Title: " +title);
-        console.log("Publisher: "+publisher);
-        console.log(" ");
-          }
+      document.getElementById("content").innerHTML +=
+                "<div class = 'entry' id='" + (i+1) +"'>" +
+                "<h3>Entry " + (i+1) + "</h3>";
+      if (authors != undefined){
+        for(let j=0; j < authors.length; j++){
+          document.getElementsByClassName("entry")[i].innerHTML +=
+            "<li><b>Author:</b> "+ authors[j]+ "</li>";
         }
+      }else{
+        document.getElementsByClassName("entry")[i].innerHTML +=
+          "<li><b>Author:</b> None </li>";
+        }
+      document.getElementsByClassName("entry")[i].innerHTML +=
+        "<li><b>Title:</b> " + title + "</li>" +
+        "<li><b>Publisher:</b> " + publisher + "</li>" +
+        "</ul></div>";
 
+    };
 
+    function addBookToList(jsonBooks){
+      const buttons = document.querySelectorAll("div.entry")
+        for (const button of buttons) {
+          button.addEventListener('click', function() {
+            const elementNumber = (this.id -1);
+            console.log(jsonBooks.items[elementNumber].volumeInfo.title);
 
-
+          })
+        }
+    }
 
 
     </script>
+    <style media="screen">
+      div.entry{
+        margin-top: 20px;
+        background-color: lightgrey;
+        padding: 20px;
+      }
+      .entry> h3{
+        margin-top: 0;
+      }
+      div.entry:hover{
+        cursor: pointer;
+      }
+
+    </style>
   </body>
 </html>
