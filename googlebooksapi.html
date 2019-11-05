@@ -8,17 +8,13 @@
       <input type="text" id="query" placeholder="Search Books">
       <button id="searchButton" type="submit" name="button">Search</button>
     </form>
+    <button type="button" name="displayList" id ="readingListButton">Show Reading List</button>
 
     <div id="heading"></div>
 
     <div id="content"></div>
 
-    <div class="readingListWrapper">
-      <button type="button" name="displayList" id ="readingListButton">Show Reading List</button>
-      <div class="readingList">
-
-      </div>
-    </div>
+    <div class="readingListWrapper"></div>
 
     <script>
     let readingList = [];
@@ -31,8 +27,6 @@
     document.getElementById("readingListButton").addEventListener('click', e => {
       showReadingList(readingList);
     })
-
-
 
     function loadBooks() {
       //Loading the books using an async call
@@ -49,15 +43,19 @@
 
       const baseURL = "https://www.googleapis.com/books/v1/volumes?q="+query;
 
+      document.getElementById("content").innerHTML = "";
+      document.getElementById('heading').innerHTML =
+                  "<h3>Searching...</h3>";
       const xhr = new XMLHttpRequest();
       xhr.onreadystatechange = function() {
+
         if (this.readyState == 4 && this.status == 200) {
 
-         let info =(JSON.parse(this.responseText));
-         getNItems(info, 5);
-         addBookToList(info);
+           let info =(JSON.parse(this.responseText));
+           getNItems(info, 5);
+           addBookToList(info);
 
-       } else if(this.readyState == 4 && this.status != 200){
+        }else if(this.readyState == 4 && this.status != 200){
            console.log("There has been an error with the http request, try checking the values you submitted on the form");
            console.log(JSON.parse(this.responseText));
           }
@@ -77,6 +75,10 @@
         const listLength = jsonBooks.items.length;
           for (let i = 0; i < listLength; i++) {
             if(i == num){break};
+
+            document.getElementById("content").innerHTML +=
+                      "<div class = 'entry' id='" + (i+1) +"'>" +
+                      "<h3>Entry " + (i+1) + "</h3>";
             printBookInfo(jsonBooks.items[i], i);
             };
 
@@ -92,9 +94,6 @@
       const title = book.volumeInfo.title;
       const publisher = book.volumeInfo.publisher;
 
-      document.getElementById("content").innerHTML +=
-                "<div class = 'entry' id='" + (i+1) +"'>" +
-                "<h3>Entry " + (i+1) + "</h3>";
       if (authors != undefined){
         for(let j=0; j < authors.length; j++){
           document.getElementsByClassName("entry")[i].innerHTML +=
@@ -117,15 +116,19 @@
           button.addEventListener('click', function() {
             const elementNumber = (this.id -1);
             readingList.unshift(jsonBooks.items[elementNumber]);
-            document.getElementById("heading").innerHTML = "<h3>" + jsonBooks.items[elementNumber].volumeInfo.title + " Was added to reading list </h3>";
+            document.getElementById("heading").innerHTML = "<h3>'" + jsonBooks.items[elementNumber].volumeInfo.title + "' was added to reading list</h3> <p>add another?</p> ";
           })
         }
     }
 
     function showReadingList(list){
-      document.getElementById('heading').innerHTML = "<h3>Here is Your Current Reading List</h3>";
+      document.getElementById('heading').innerHTML = "<h3> Current Reading List:</h3>";
       document.getElementById("content").innerHTML = "";
+      if(list.length == 0){document.getElementById('heading').innerHTML = "<h3>Your Reading List is Empty</h3><p>Search for a book and add it to your reading list.</p>";}
       for (let i = 0; i < list.length; i++){
+        document.getElementById("content").innerHTML +=
+                  "<div class = 'entry' id='" + (i+1) +"'>" +
+                  "<h3>Reading List Item "+(i+1)+ "</h3>";
         printBookInfo(list[i], i);
       }
     }
@@ -133,10 +136,16 @@
 
     </script>
     <style media="screen">
+      body{
+        padding-top: 80px;
+        max-width: 900px;
+        margin: auto;
+      }
       div.entry{
         margin-top: 20px;
         background-color: lightgrey;
         padding: 20px;
+        border-radius: 20px;
       }
       .entry> h3{
         margin-top: 0;
@@ -145,10 +154,12 @@
         cursor: pointer;
         transform: scale(1.01);
       }
+      #heading{
+        text-align: center;
+      }
       div.readingListWrapper{
         margin-top: 30px;
       }
-
     </style>
   </body>
 </html>
