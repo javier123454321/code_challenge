@@ -13,13 +13,26 @@
 
     <div id="content"></div>
 
-    <script>
+    <div class="readingListWrapper">
+      <button type="button" name="displayList" id ="readingListButton">Show Reading List</button>
+      <div class="readingList">
 
+      </div>
+    </div>
+
+    <script>
+    let readingList = [];
     document.getElementById("searchBooksForm").addEventListener('submit', e => {
         loadBooks();
         // Prevent the default form submit
         e.preventDefault();
     });
+
+    document.getElementById("readingListButton").addEventListener('click', e => {
+      showReadingList(readingList);
+    })
+
+
 
     function loadBooks() {
       //Loading the books using an async call
@@ -103,10 +116,18 @@
         for (const button of buttons) {
           button.addEventListener('click', function() {
             const elementNumber = (this.id -1);
-            console.log(jsonBooks.items[elementNumber].volumeInfo.title);
-
+            readingList.unshift(jsonBooks.items[elementNumber]);
+            document.getElementById("heading").innerHTML = "<h3>" + jsonBooks.items[elementNumber].volumeInfo.title + " Was added to reading list </h3>";
           })
         }
+    }
+
+    function showReadingList(list){
+      document.getElementById('heading').innerHTML = "<h3>Here is Your Current Reading List</h3>";
+      document.getElementById("content").innerHTML = "";
+      for (let i = 0; i < list.length; i++){
+        printBookInfo(list[i], i);
+      }
     }
 
 
@@ -122,6 +143,10 @@
       }
       div.entry:hover{
         cursor: pointer;
+        transform: scale(1.01);
+      }
+      div.readingListWrapper{
+        margin-top: 30px;
       }
 
     </style>
