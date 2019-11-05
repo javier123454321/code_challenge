@@ -42,7 +42,7 @@
 
          let info =(JSON.parse(this.responseText));
          getNItems(info, 5);
-
+         addBookToList(info);
 
        } else if(this.readyState == 4 && this.status != 200){
            console.log("There has been an error with the http request, try checking the values you submitted on the form");
@@ -54,7 +54,6 @@
     }
 
     function getNItems(jsonBooks, num){
-      console.log(jsonBooks);
       document.getElementById('heading').innerHTML = "";
       document.getElementById("content").innerHTML = "";
       //Print the first 5 query items
@@ -76,18 +75,20 @@
 
     function printBookInfo(book, i){
       //Format how book items are displayed for user
-      if(book){
-        const authors = book.volumeInfo.authors;
-        const title = book.volumeInfo.title;
-        const publisher = book.volumeInfo.publisher;
+      const activeBook = new BookInfo(book);
+      // const authors = book.volumeInfo.authors;
+      // const title = book.volumeInfo.title;
+      // const publisher = book.volumeInfo.publisher;
 
-        document.getElementById("content").innerHTML +=
-                  "<div class = 'entry'>" +
-                  "<h3>Entry " + (i+1) + "</h3>";
-      if (authors != undefined){
-        for(let j=0; j < authors.length; j++){
+      document.getElementById("content").innerHTML +=
+                "<div class = 'entry' id='" + (i+1) +"'>" +
+                "<h3>Entry " + (i+1) + "</h3>";
+      if (activeBook.authors() != undefined){
+        for(let j=0; j < activeBook.authors.length; j++){
+          // document.getElementsByClassName("entry")[i].innerHTML +=
+          //   "<li><b>Author:</b> "+ authors[j]+ "</li>";
           document.getElementsByClassName("entry")[i].innerHTML +=
-            "<li><b>Author:</b> "+ authors[j]+ "</li>";
+            "<li><b>Author:</b> "+ activeBook.authors[j]+ "</li>";
         }
       }else{
         document.getElementsByClassName("entry")[i].innerHTML +=
@@ -97,12 +98,39 @@
         "<li><b>Title:</b> " + title + "</li>" +
         "<li><b>Publisher:</b> " + publisher + "</li>" +
         "</ul></div>";
-      }
+
     };
 
-    function addBookToList(book){
-      console.log("nothingHere");
+    class BookInfo {
+      constructor(json) {
+          this.authors = json.volumeInfo.authors;
+          this.title = json.volumeInfo.title;
+          this.publisher = json.volumeInfo.publisher;
+      }
+      get authors(){
+        console.log("get authors called");
+        return this.authors;
+      }
+      get title(){
+        return this.title;
+      }
+      get publisher(){
+        return this.publisher;
+      }
     }
+
+    function addBookToList(jsonBooks){
+      const buttons = document.querySelectorAll("div.entry")
+        for (const button of buttons) {
+          button.addEventListener('click', function() {
+            const elementNumber = (this.id -1);
+            console.log(jsonBooks.items[elementNumber].volumeInfo.title)
+
+
+          })
+        }
+    }
+
 
     </script>
     <style media="screen">
