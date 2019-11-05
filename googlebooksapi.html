@@ -75,20 +75,17 @@
 
     function printBookInfo(book, i){
       //Format how book items are displayed for user
-      const activeBook = new BookInfo(book);
-      // const authors = book.volumeInfo.authors;
-      // const title = book.volumeInfo.title;
-      // const publisher = book.volumeInfo.publisher;
+      const authors = book.volumeInfo.authors;
+      const title = book.volumeInfo.title;
+      const publisher = book.volumeInfo.publisher;
 
       document.getElementById("content").innerHTML +=
                 "<div class = 'entry' id='" + (i+1) +"'>" +
                 "<h3>Entry " + (i+1) + "</h3>";
-      if (activeBook.authors() != undefined){
-        for(let j=0; j < activeBook.authors.length; j++){
-          // document.getElementsByClassName("entry")[i].innerHTML +=
-          //   "<li><b>Author:</b> "+ authors[j]+ "</li>";
+      if (authors != undefined){
+        for(let j=0; j < authors.length; j++){
           document.getElementsByClassName("entry")[i].innerHTML +=
-            "<li><b>Author:</b> "+ activeBook.authors[j]+ "</li>";
+            "<li><b>Author:</b> "+ authors[j]+ "</li>";
         }
       }else{
         document.getElementsByClassName("entry")[i].innerHTML +=
@@ -101,31 +98,12 @@
 
     };
 
-    class BookInfo {
-      constructor(json) {
-          this.authors = json.volumeInfo.authors;
-          this.title = json.volumeInfo.title;
-          this.publisher = json.volumeInfo.publisher;
-      }
-      get authors(){
-        console.log("get authors called");
-        return this.authors;
-      }
-      get title(){
-        return this.title;
-      }
-      get publisher(){
-        return this.publisher;
-      }
-    }
-
     function addBookToList(jsonBooks){
       const buttons = document.querySelectorAll("div.entry")
         for (const button of buttons) {
           button.addEventListener('click', function() {
             const elementNumber = (this.id -1);
-            console.log(jsonBooks.items[elementNumber].volumeInfo.title)
-
+            console.log(jsonBooks.items[elementNumber].volumeInfo.title);
 
           })
         }
