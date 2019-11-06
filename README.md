@@ -11,7 +11,7 @@ Was tasked to create a command line app that accomplished the following
 ## Implementation
 I chose to do it in JavaScript because of my familiarity with the language specifically in regards to doing asynchronous http requests. I gave the UX, only enough attention to make it functional. I decided to go with a graphic application because it made most sense to me to select the divs with all the info by clicking on them. It did cause me to have to resist the urge to make it more visually appealing at every step. I could not, however, resist making the button clicking more interactive, though it is far from pleasant. One thing that I learned in design school is that it is sometimes better not to design something at all than to design it badly for lack of time. I hope that it doesn't hurt my chances here.
 
-As far as the functionality and reliability, the form was crashing when the user input a string with only spaces, and also when there were no results for the query. I created cases that handled all those exceptions. I imagine there are unforseen circumstances that will still cause an error, but the way it is set up should catch it. 
+As far as the functionality and reliability, the form was crashing when the user input a string with only spaces, and also when there were no results for the query. Another issue that caused problems at the beginning was having multiple authors per book. I created cases that handled all those exceptions. I imagine there are unforseen circumstances that will still cause an error, but the way it is set up should catch it. 
 
 The reading list feature is stored locally, and therefore resets on browser refresh. I did put a limit on adding the same book to the reading list twice, with an updating title that informs the user.
 
