@@ -30,49 +30,53 @@
 
     function loadBooks() {
       //Loading the books using an async call
+      //check whether no submission is being input first
+        let query = document.getElementById("query").value;
+        document.getElementById("query").value = "";
+        // Appending query to the url of the api to mimic a GET function
 
-      let query = document.getElementById("query").value;
-      document.getElementById("query").value = "";
-      // Appending query to the url of the api to mimic a GET function
+        //A bit of string sanitization and formatting for the request
+        //The only special character not allowed is the plus (+) sign which would the api will interpret as different search terms
+        let formattedQuery = query.trim();
+        formattedQuery = formattedQuery.replace(/[+]/g, '');
+        formattedQuery = formattedQuery.replace(/\s/g, "+");
+        console.log("Searching for: '" + formattedQuery + "'");
 
-      //A bit of string sanitization and formatting for the request
-      //The only special character not allowed is the plus (+) sign which would confuse the query
-      query = query.trim();
-      query = query.replace("+", "")
-      query = query.replace(" ", "+");
+        if(formattedQuery != ""){
+          //makes sure that the user cannot put an empty string to the search bar which produces a 400 error
+          const baseURL = "https://www.googleapis.com/books/v1/volumes?q="+formattedQuery;
+          const xhr = new XMLHttpRequest();
+          console.log(baseURL);
 
-      const baseURL = "https://www.googleapis.com/books/v1/volumes?q="+query;
+          document.getElementById("content").innerHTML = "";
+          document.getElementById('heading').innerHTML =
+                      "<h3>Searching...</h3>";
 
-      document.getElementById("content").innerHTML = "";
-      document.getElementById('heading').innerHTML =
-                  "<h3>Searching...</h3>";
-      const xhr = new XMLHttpRequest();
-      xhr.onreadystatechange = function() {
+          xhr.onload = function(){
+            if(this.status == 200) {
+              let info =(JSON.parse(this.responseText));
+              getNItems(info, 5);
+              addBookToList(info);
+              document.getElementById('heading').innerHTML =
+                "<h3>Results for: '"+ query +"'</h3>"+
+                "<p>Select entry to add to reading list</p>";
 
-        if (this.readyState == 4 && this.status == 200) {
+            }else{reportError()}}; //it can load but not be a valid search
 
-           let info =(JSON.parse(this.responseText));
-           getNItems(info, 5);
-           addBookToList(info);
-
-        }else if(this.readyState == 4 && this.status != 200){
-           console.log("There has been an error with the http request, try checking the values you submitted on the form");
-           console.log(JSON.parse(this.responseText));
+          xhr.onerror = function(){
+            reportError();
           }
-        };
-      xhr.open("GET", baseURL, true);
-      xhr.send();
-    }
+
+          xhr.open("GET", baseURL, true);
+          xhr.send();
+        }}
 
     function getNItems(jsonBooks, num){
       document.getElementById('heading').innerHTML = "";
       document.getElementById("content").innerHTML = "";
       //Print the first 5 query items
       if (jsonBooks.totalItems != 0){
-        document.getElementById('heading').innerHTML =
-          "<h3>Select entry number to add book to your reading list:</h3>";
-
-        const listLength = jsonBooks.items.length;
+          const listLength = jsonBooks.items.length;
           for (let i = 0; i < listLength; i++) {
             if(i == num){break};
 
@@ -107,24 +111,49 @@
         "<li><b>Title:</b> " + title + "</li>" +
         "<li><b>Publisher:</b> " + publisher + "</li>" +
         "</ul></div>";
+    };
 
+    function reportError(){
+      document.getElementById('heading').innerHTML =
+                  "<h3>Invalid Input, Please Try Another Search</h3>";
     };
 
     function addBookToList(jsonBooks){
-      const buttons = document.querySelectorAll("div.entry")
-        for (const button of buttons) {
-          button.addEventListener('click', function() {
+      const entries = document.querySelectorAll("div.entry")
+        for (const entry of entries) {
+          entry.addEventListener('click', function() {
             const elementNumber = (this.id -1);
-            readingList.unshift(jsonBooks.items[elementNumber]);
-            document.getElementById("heading").innerHTML = "<h3>'" + jsonBooks.items[elementNumber].volumeInfo.title + "' was added to reading list</h3> <p>add another?</p> ";
+            if (!isBookInList(jsonBooks.items[elementNumber], readingList)){
+              readingList.unshift(jsonBooks.items[elementNumber]);
+              document.getElementById("heading").innerHTML =
+                  "<h3>'" + jsonBooks.items[elementNumber].volumeInfo.title + "' was added to reading list</h3> "+
+                  "<p>add another?</p> ";
+            }else{
+              document.getElementById("heading").innerHTML =
+                  "<h3>'" + jsonBooks.items[elementNumber].volumeInfo.title + "' is already on the reading list</h3> "
+
+            }
           })
         }
+    }
+
+    function isBookInList(book, readingList){
+      if(readingList.length == 0){return false};
+      //checks if a book is in already in the readingList
+      for(let i = 0; i < readingList.length; i++){
+        if(book.volumeInfo == readingList[i].volumeInfo){
+          return true;
+        }
+      }
     }
 
     function showReadingList(list){
       document.getElementById('heading').innerHTML = "<h3> Current Reading List:</h3>";
       document.getElementById("content").innerHTML = "";
-      if(list.length == 0){document.getElementById('heading').innerHTML = "<h3>Your Reading List is Empty</h3><p>Search for a book and add it to your reading list.</p>";}
+      if(list.length == 0){document.getElementById('heading').innerHTML =
+          "<h3>Your Reading List is Empty</h3>" +
+          "<p>Search for a book and add it to your reading list.</p>";}
+
       for (let i = 0; i < list.length; i++){
         document.getElementById("content").innerHTML +=
                   "<div class = 'entry' id='" + (i+1) +"'>" +
@@ -137,13 +166,14 @@
     </script>
     <style media="screen">
       body{
-        padding-top: 80px;
-        max-width: 900px;
+        padding-top: 50px;
+        max-width: 700px;
+        width:90%;
         margin: auto;
       }
       div.entry{
         margin-top: 20px;
-        background-color: lightgrey;
+        background-color: GAINSBORO;
         padding: 20px;
         border-radius: 20px;
       }
@@ -153,7 +183,13 @@
       div.entry:hover{
         cursor: pointer;
         transform: scale(1.01);
+        box-shadow: 0 4px 10px;
       }
+      div.entry:active{
+        background-color: lightgrey;
+        box-shadow: 0 2px 5px;
+      }
+
       #heading{
         text-align: center;
       }
