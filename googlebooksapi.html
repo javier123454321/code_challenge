@@ -111,7 +111,6 @@
         "<li><b>Title:</b> " + title + "</li>" +
         "<li><b>Publisher:</b> " + publisher + "</li>" +
         "</ul></div>";
-
     };
 
     function reportError(){
@@ -120,20 +119,41 @@
     };
 
     function addBookToList(jsonBooks){
-      const buttons = document.querySelectorAll("div.entry")
-        for (const button of buttons) {
-          button.addEventListener('click', function() {
+      const entries = document.querySelectorAll("div.entry")
+        for (const entry of entries) {
+          entry.addEventListener('click', function() {
             const elementNumber = (this.id -1);
-            readingList.unshift(jsonBooks.items[elementNumber]);
-            document.getElementById("heading").innerHTML = "<h3>'" + jsonBooks.items[elementNumber].volumeInfo.title + "' was added to reading list</h3> <p>add another?</p> ";
+            if (!isBookInList(jsonBooks.items[elementNumber], readingList)){
+              readingList.unshift(jsonBooks.items[elementNumber]);
+              document.getElementById("heading").innerHTML =
+                  "<h3>'" + jsonBooks.items[elementNumber].volumeInfo.title + "' was added to reading list</h3> "+
+                  "<p>add another?</p> ";
+            }else{
+              document.getElementById("heading").innerHTML =
+                  "<h3>'" + jsonBooks.items[elementNumber].volumeInfo.title + "' is already on the reading list</h3> "
+
+            }
           })
         }
+    }
+
+    function isBookInList(book, readingList){
+      if(readingList.length == 0){return false};
+      //checks if a book is in already in the readingList
+      for(let i = 0; i < readingList.length; i++){
+        if(book.volumeInfo == readingList[i].volumeInfo){
+          return true;
+        }
+      }
     }
 
     function showReadingList(list){
       document.getElementById('heading').innerHTML = "<h3> Current Reading List:</h3>";
       document.getElementById("content").innerHTML = "";
-      if(list.length == 0){document.getElementById('heading').innerHTML = "<h3>Your Reading List is Empty</h3><p>Search for a book and add it to your reading list.</p>";}
+      if(list.length == 0){document.getElementById('heading').innerHTML =
+          "<h3>Your Reading List is Empty</h3>" +
+          "<p>Search for a book and add it to your reading list.</p>";}
+
       for (let i = 0; i < list.length; i++){
         document.getElementById("content").innerHTML +=
                   "<div class = 'entry' id='" + (i+1) +"'>" +
