@@ -10,7 +10,7 @@ Was tasked to create a command line app that accomplished the following
 
 ## Implementation
 
-link to implementation: [https://javier123454321.github.io/code_challenge/googlebooksapi.html]
+link to implementation: https://javier123454321.github.io/code_challenge/googlebooksapi.html
 
 I chose to do it in JavaScript because of my familiarity with the language specifically in regards to doing asynchronous http requests. I gave the UX, only enough attention to make it functional. I decided to go with a graphic application because it made most sense to me to select the divs with all the info by clicking on them. It did cause me to have to resist the urge to make it more visually appealing at every step. I could not, however, resist making the button clicking more interactive, though it is far from pleasant. One thing that I learned in design school is that it is sometimes better not to design something at all than to design it badly for lack of time. I hope that it doesn't hurt my chances here.
 
