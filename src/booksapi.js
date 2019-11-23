@@ -9,10 +9,9 @@ class Books{
 }
 
 const emptyQueryResponse = "<h3>The query matched no books</h3>";
+const searchMessage = "<h3>Searching...</h3>";
 
 function renderDOMElement(domElement, HTML){
-  console.log("rendering");
-  console.log(HTML);
   domElement.innerHTML = HTML;
 }
 
@@ -61,8 +60,9 @@ function makeGoogleBooksHTTPRequest(formattedQuery, query) {
     const xhr = new XMLHttpRequest();
     console.log(baseURL);
     document.getElementById("content").innerHTML = "";
-    document.getElementById('heading').innerHTML =
-      "<h3>Searching...</h3>";
+    // document.getElementById('heading').innerHTML =
+    //   "<h3>Searching...</h3>";
+    renderDOMElement(document.getElementById('heading'), searchMessage)
     xhr.onload = function () {
       if (this.status == 200) {
         let info = (JSON.parse(this.responseText));
@@ -93,16 +93,20 @@ function getNItems(jsonBooks, num){
       for (let i = 0; i < listLength; i++) {
         if(i == num){break};
 
-        document.getElementById("content").innerHTML +=
-                  "<div class = 'entry' id='" + (i+1) +"'>" +
-                  "<h3>Entry " + (i+1) + "</h3>";
-        printBookInfo(jsonBooks.items[i], i);
+        renderBooksOutput(i, jsonBooks);
         };
 
   }else{    
     renderDOMElement(document.getElementById('heading'), emptyQueryResponse)
     };
   }
+
+function renderBooksOutput(i, jsonBooks) {
+  document.getElementById("content").innerHTML +=
+    "<div class = 'entry' id='" + (i + 1) + "'>" +
+    "<h3>Entry " + (i + 1) + "</h3>";
+  printBookInfo(jsonBooks.items[i], i);
+}
 
 function printBookInfo(book, i){
   //  Format how book items are displayed for user input
@@ -124,7 +128,8 @@ function printBookInfo(book, i){
   entry[i].innerHTML +=
   "<li><b>Title:</b> " + title + "</li>" +
   "<li><b>Publisher:</b> " + publisher + "</li>" +
-  "</ul></div>";
+  "</ul>"+
+  "<button id='addToReadingList' onclick='addBookToList()'>Add Book to List</button></div>";
 };
 
 function reportError(){
