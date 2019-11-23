@@ -1,4 +1,27 @@
+class Books{
+  constructor(json){
+    this.books = json;
+    this.readingList = [];
+  }
+  function (params) {
+    //
+  }
+}
+
+const emptyQueryResponse = "<h3>The query matched no books</h3>";
+
+function renderDOMElement(domElement, HTML){
+  console.log("rendering");
+  console.log(HTML);
+  domElement.innerHTML = HTML;
+}
+
+function appendToDOMElement(domElement, HTML){
+  domElement.innerHTML += HTML;
+}
+
 let readingList = [];
+
 document.getElementById("searchBooksForm").addEventListener('submit', e => {
     loadBooks();
     // Prevent the default form submit
@@ -14,13 +37,14 @@ function isQueryEmpty(query){
 }
 
 function formatQuery(query){
-  //The only special character not allowed is the plus (+) sign which would the api will 
-  //interpret as different search terms
+  
+  //The only special character not allowed is the plus (+) sign which would the api will  interpret as different search terms
   let formattedQuery = query.trim();
   formattedQuery = formattedQuery.replace(/[+]/g, '');
   formattedQuery = formattedQuery.replace(/\s/g, "+");
   return formattedQuery;
 }
+
 function loadBooks() {
   //Loading the books using an async call
   let query = document.getElementById("query").value;
@@ -75,14 +99,13 @@ function getNItems(jsonBooks, num){
         printBookInfo(jsonBooks.items[i], i);
         };
 
-  }else{
-    document.getElementById('heading').innerHTML =
-      "<h3>The query matched no books</h3>";
+  }else{    
+    renderDOMElement(document.getElementById('heading'), emptyQueryResponse)
     };
   }
 
 function printBookInfo(book, i){
-  //Format how book items are displayed for user
+  //  Format how book items are displayed for user input
   const authors = book.volumeInfo.authors;
   const title = book.volumeInfo.title;
   const publisher = book.volumeInfo.publisher;
