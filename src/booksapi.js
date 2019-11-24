@@ -67,7 +67,6 @@ function makeGoogleBooksHTTPRequest(formattedQuery, query) {
         currentQuery = (JSON.parse(this.responseText));
         
         getNItems(currentQuery, 5);
-        addButtonListener(currentQuery);
 
         document.getElementById('heading').innerHTML =
           `<h3>Results for: '${query}'</h3>
@@ -106,7 +105,7 @@ function renderBooksOutput(i, jsonBooks) {
 
   document.getElementById("content").innerHTML +=
     `<div class = 'entry' id='${(i + 1)}'>
-    <h3>Entry " + (i + 1) + "</h3>`;
+    <h3>Entry ${(i + 1)}</h3>`;
 
   printBookInfo(jsonBooks.items[i], i);
 }
@@ -133,7 +132,7 @@ function printBookInfo(book, i){
   <li><b>Title:</b> ${title} </li> 
   <li><b>Publisher:</b> ${publisher} </li>
   </ul> 
-  <button class='addToReadingList' onclick='addBookToList(book)'>
+  <button class='addToReadingList' onclick='addBookToList(${i})'>
   Add Book to List
   </button>
   </div>`;
@@ -144,28 +143,22 @@ function reportError(){
               "<h3>Invalid Input, Please Try Another Search</h3>";
 };
 
-function addButtonListener(jsonBooks){
-  //TODO
-}
-
-function addBookToList(jsonBooks){
-  const buttons = document.querySelectorAll("button.addToReadingList")
-  const elementNumber = (this.id -1);
-  if (!isBookInList(jsonBooks.items[elementNumber], readingList)){
-    readingList.unshift(jsonBooks.items[elementNumber]);
+function addBookToList(i){
+  if (!isBookInList(currentQuery.items[i], readingList)){
+    readingList.unshift(currentQuery.items[i]);
     document.getElementById("heading").innerHTML =
-        `<h3>'${jsonBooks.items[elementNumber].volumeInfo.title}' was added to reading list</h3>
+        `<h3>'${currentQuery.items[i].volumeInfo.title}' was added to reading list</h3>
         <p>add another?</p> `;
   }else{
     document.getElementById("heading").innerHTML =
-        `<h3>'${jsonBooks.items[elementNumber].volumeInfo.title}' is already on the reading list</h3>`
+        `<h3>'${currentQuery.items[i].volumeInfo.title}' is already on the reading list</h3>`
 
   }
 }
 
 function isBookInList(book, readingList){
   if(readingList.length == 0){return false};
-  //checks if a book is in already in the readingList
+
   for(let i = 0; i < readingList.length; i++){
     if(book.volumeInfo == readingList[i].volumeInfo){
       return true;
