@@ -19,6 +19,7 @@ function appendToDOMElement(domElement, HTML){
   domElement.innerHTML += HTML;
 }
 
+let currentQuery = [];
 let readingList = [];
 
 document.getElementById("searchBooksForm").addEventListener('submit', e => {
@@ -58,19 +59,19 @@ function makeGoogleBooksHTTPRequest(formattedQuery, query) {
     //makes sure that the user cannot put an empty string to the search bar which produces a 400 error
     const baseURL = "https://www.googleapis.com/books/v1/volumes?q=" + formattedQuery;
     const xhr = new XMLHttpRequest();
-    console.log(baseURL);
+
     document.getElementById("content").innerHTML = "";
-    // document.getElementById('heading').innerHTML =
-    //   "<h3>Searching...</h3>";
     renderDOMElement(document.getElementById('heading'), searchMessage)
     xhr.onload = function () {
       if (this.status == 200) {
-        let info = (JSON.parse(this.responseText));
-        getNItems(info, 5);
-        addBookToList(info);
+        currentQuery = (JSON.parse(this.responseText));
+        
+        getNItems(currentQuery, 5);
+        addButtonListener(currentQuery);
+
         document.getElementById('heading').innerHTML =
-          "<h3>Results for: '" + query + "'</h3>" +
-          "<p>Select entry to add to reading list</p>";
+          `<h3>Results for: '${query}'</h3>
+          <p>Select entry to add to reading list</p>`;
       }
       else {
         reportError();
@@ -102,9 +103,11 @@ function getNItems(jsonBooks, num){
   }
 
 function renderBooksOutput(i, jsonBooks) {
+
   document.getElementById("content").innerHTML +=
-    "<div class = 'entry' id='" + (i + 1) + "'>" +
-    "<h3>Entry " + (i + 1) + "</h3>";
+    `<div class = 'entry' id='${(i + 1)}'>
+    <h3>Entry " + (i + 1) + "</h3>`;
+
   printBookInfo(jsonBooks.items[i], i);
 }
 
@@ -119,17 +122,21 @@ function printBookInfo(book, i){
     
     for(let j in authors){
       entry[i].innerHTML +=
-        "<li><b>Author:</b> "+ authors[j]+ "</li>";
+        `<li><b>Author:</b> ${authors[j]}</li>`;
     }
   }else{
     entry[i].innerHTML +=
       "<li><b>Author:</b> None </li>";
     }
   entry[i].innerHTML +=
-  "<li><b>Title:</b> " + title + "</li>" +
-  "<li><b>Publisher:</b> " + publisher + "</li>" +
-  "</ul>"+
-  "<button id='addToReadingList' onclick='addBookToList()'>Add Book to List</button></div>";
+  `
+  <li><b>Title:</b> ${title} </li> 
+  <li><b>Publisher:</b> ${publisher} </li>
+  </ul> 
+  <button class='addToReadingList' onclick='addBookToList(book)'>
+  Add Book to List
+  </button>
+  </div>`;
 };
 
 function reportError(){
@@ -137,23 +144,23 @@ function reportError(){
               "<h3>Invalid Input, Please Try Another Search</h3>";
 };
 
-function addBookToList(jsonBooks){
-  const entries = document.querySelectorAll("div.entry")
-    for (const entry of entries) {
-      entry.addEventListener('click', function() {
-        const elementNumber = (this.id -1);
-        if (!isBookInList(jsonBooks.items[elementNumber], readingList)){
-          readingList.unshift(jsonBooks.items[elementNumber]);
-          document.getElementById("heading").innerHTML =
-              "<h3>'" + jsonBooks.items[elementNumber].volumeInfo.title + "' was added to reading list</h3> "+
-              "<p>add another?</p> ";
-        }else{
-          document.getElementById("heading").innerHTML =
-              "<h3>'" + jsonBooks.items[elementNumber].volumeInfo.title + "' is already on the reading list</h3> "
+function addButtonListener(jsonBooks){
+  //TODO
+}
 
-        }
-      })
-    }
+function addBookToList(jsonBooks){
+  const buttons = document.querySelectorAll("button.addToReadingList")
+  const elementNumber = (this.id -1);
+  if (!isBookInList(jsonBooks.items[elementNumber], readingList)){
+    readingList.unshift(jsonBooks.items[elementNumber]);
+    document.getElementById("heading").innerHTML =
+        `<h3>'${jsonBooks.items[elementNumber].volumeInfo.title}' was added to reading list</h3>
+        <p>add another?</p> `;
+  }else{
+    document.getElementById("heading").innerHTML =
+        `<h3>'${jsonBooks.items[elementNumber].volumeInfo.title}' is already on the reading list</h3>`
+
+  }
 }
 
 function isBookInList(book, readingList){
@@ -170,13 +177,15 @@ function showReadingList(list){
   document.getElementById('heading').innerHTML = "<h3> Current Reading List:</h3>";
   document.getElementById("content").innerHTML = "";
   if(list.length == 0){document.getElementById('heading').innerHTML =
-      "<h3>Your Reading List is Empty</h3>" +
-      "<p>Search for a book and add it to your reading list.</p>";}
+      `<h3>Your Reading List is Empty</h3>
+      <p>Search for a book and add it to your reading list.</p>`;
+    }
 
   for (let i = 0; i < list.length; i++){
     document.getElementById("content").innerHTML +=
-              "<div class = 'entry' id='" + (i+1) +"'>" +
-              "<h3>Reading List Item "+(i+1)+ "</h3>";
+              `
+              <div class = 'entry' id='${(i+1)}'>
+              <h3>Reading List Item ${(i+1)}</h3>`;
     printBookInfo(list[i], i);
   }
 }
