@@ -3,12 +3,14 @@
     <title>8th Light - Code Challenge</title>
   </head>
   <body>
+    <div class="body">
 
     <form id="searchBooksForm">
       <input type="text" id="query" placeholder="Search Books">
       <button id="searchButton" type="submit" name="button">Search</button>
     </form>
-    <button type="button" name="displayList" id ="readingListButton">Show Reading List</button>
+
+    <button type="button" name="displayList" id ="readingListButton" onclick="showReadingList()">Show Reading List</button>
 
     <div id="heading"></div>
 
@@ -18,38 +20,7 @@
 
     <script src="src/booksapi.js"></script>
     
-    <style media="screen">
-      body{
-        padding-top: 50px;
-        max-width: 700px;
-        width:90%;
-        margin: auto;
-      }
-      div.entry{
-        margin-top: 20px;
-        background-color: GAINSBORO;
-        padding: 20px;
-        border-radius: 20px;
-      }
-      .entry> h3{
-        margin-top: 0;
-      }
-      div.entry:hover{
-        cursor: pointer;
-        transform: scale(1.01);
-        box-shadow: 0 4px 10px;
-      }
-      div.entry:active{
-        background-color: lightgrey;
-        box-shadow: 0 2px 5px;
-      }
-
-      #heading{
-        text-align: center;
-      }
-      div.readingListWrapper{
-        margin-top: 30px;
-      }
-    </style>
+    <link rel="stylesheet" type="text/css" href="style/master.css">
+  </div>
   </body>
 </html>

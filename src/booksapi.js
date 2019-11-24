@@ -29,7 +29,7 @@ document.getElementById("searchBooksForm").addEventListener('submit', e => {
 });
 
 document.getElementById("readingListButton").addEventListener('click', e => {
-  showReadingList(readingList);
+  showReadingList();
 })
 
 function isQueryEmpty(query){
@@ -102,23 +102,31 @@ function getNItems(jsonBooks, num){
   }
 
 function renderBooksOutput(i, jsonBooks) {
+  let divClassName = 'entry'
 
   document.getElementById("content").innerHTML +=
-    `<div class = 'entry' id='${(i + 1)}'>
-    <h3>Entry ${(i + 1)}</h3>`;
+  `<div class = ${divClassName} id='${(i + 1)}'>`;
 
-  printBookInfo(jsonBooks.items[i], i);
+  renderBookInfo(divClassName, jsonBooks.items[i], i);
+  document.getElementsByClassName(divClassName)[i].innerHTML += 
+  `<div class='wrapper'>
+  <button class='addToReadingList' onclick='addBookToList(${i})'>
+  Add Book to List
+  </button>
+  </div>
+  </div>`
 }
 
-function printBookInfo(book, i){
+function renderBookInfo(className, book, i){
   //  Format how book items are displayed for user input
   const authors = book.volumeInfo.authors;
   const title = book.volumeInfo.title;
   const publisher = book.volumeInfo.publisher;
-  let entry = document.getElementsByClassName("entry");
-  
+  const entry = document.getElementsByClassName(className);
+
+  entry[i].innerHTML += `<h4>${title}</h4>`
+
   if (authors != undefined){
-    
     for(let j in authors){
       entry[i].innerHTML +=
         `<li><b>Author:</b> ${authors[j]}</li>`;
@@ -129,13 +137,9 @@ function printBookInfo(book, i){
     }
   entry[i].innerHTML +=
   `
-  <li><b>Title:</b> ${title} </li> 
   <li><b>Publisher:</b> ${publisher} </li>
-  </ul> 
-  <button class='addToReadingList' onclick='addBookToList(${i})'>
-  Add Book to List
-  </button>
-  </div>`;
+  </ul>
+  `;
 };
 
 function reportError(){
@@ -166,19 +170,18 @@ function isBookInList(book, readingList){
   }
 }
 
-function showReadingList(list){
+function showReadingList(){
   document.getElementById('heading').innerHTML = "<h3> Current Reading List:</h3>";
   document.getElementById("content").innerHTML = "";
-  if(list.length == 0){document.getElementById('heading').innerHTML =
+  if(readingList.length == 0){document.getElementById('heading').innerHTML =
       `<h3>Your Reading List is Empty</h3>
       <p>Search for a book and add it to your reading list.</p>`;
     }
 
-  for (let i = 0; i < list.length; i++){
+  for (let i = 0; i < readingList.length; i++){
     document.getElementById("content").innerHTML +=
               `
-              <div class = 'entry' id='${(i+1)}'>
-              <h3>Reading List Item ${(i+1)}</h3>`;
-    printBookInfo(list[i], i);
+              <div class = 'entry' id='${(i+1)}'>`;
+              renderBookInfo('entry', readingList[i], i);
   }
 }
