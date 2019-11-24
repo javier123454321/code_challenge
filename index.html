@@ -5,12 +5,12 @@
   <body>
     <div class="body">
 
-    <form id="searchBooksForm">
+    <form id="searchBooksForm" onsubmit="return false;">
       <input type="text" id="query" placeholder="Search Books">
-      <button id="searchButton" type="submit" name="button">Search</button>
+      <button id="searchButton" type="submit" name="button" onclick="loadBooks()">Search</button>
     </form>
 
-    <button type="button" name="displayList" id ="readingListButton" onclick="showReadingList()">Show Reading List</button>
+    <button type="button" name="displayList" id ="readingListButton" onclick="renderReadingList()">Show Reading List</button>
 
     <div id="heading"></div>
 
@@ -19,6 +19,7 @@
     <div class="readingListWrapper"></div>
 
     <script src="src/booksapi.js"></script>
+    <script src="src/renderFunctions.js"></script>
     
     <link rel="stylesheet" type="text/css" href="style/master.css">
   </div>

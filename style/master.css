@@ -1,16 +1,19 @@
+html{
+    scroll-behavior: smooth;
+    -webkit-animation: 1s smooth all;
+}
+
 body{
     font-family: Arial, Helvetica, sans-serif;
     
     max-width: 700px;
     margin: auto;
-    /* background-color: lightgrey;  */
   }
 .body{
     padding: 50px 25px;
     margin: 0 auto;
     height: 100%;
     width:90%;
-    /* background-color: grey;  */
   }
   div.entry{
     color: lightgrey;
@@ -29,6 +32,18 @@ body{
   .wrapper > button{
       padding: 10px;
       margin: 10px auto;
+      border: solid 1px white;
+      border-radius: 40px;;
+      background-color: rgb(0,0,0,0);
+      font-weight: 800;
+      color: white;
+  }
+  .wrapper > button:hover{
+    -webkit-animation: 1s smooth all;
+    -moz-animation: 1s smooth all;
+    background-color: rgba(190, 55, 55, 0.527);
+    transform: scale(1.01);
+    box-shadow: silver 0 1px 3px;
   }
   .entry > li{
       list-style: none;
