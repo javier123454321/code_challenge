@@ -6,6 +6,9 @@
 * Business Logic was convoluted with Display Logic
 * Language use could be more idiomatic (use string literals, remove superfluous comments, etc.)
 
+
+Current Implementation: https://javier123454321.github.io/code_challenge
+
 All extremely insightful feedback, and there were also these questions to ponder:
 
 What if the API is slow or responds with errors? How long should you wait for a response? How can you simulate problems with the API in your local testing?
@@ -26,21 +29,12 @@ I used the XMLHttpRequest methods for JS because of both my familiarity with tha
 
 Javascript is becoming my favorite language the more that I become familiar with it. It seems to lack precision in regards to floats, and I probably wouldn't use it for computational applications. I really like Java for more robust and precise computations, but to get a quick result on the browser and do simple http requests on a network, JS was a no-brainer for me. I also really like it, as a lot of my thinking is visual, and js with html and css can make something visual with very little overhead.
 
-Current Implementation: https://javier123454321.github.io/code_challenge/googlebooksapi.html
 
 # Initial Submission
 
-## requirements for the project
-Was tasked to create a command line app that accomplished the following
-  *  This application should allow you to:
-  *  Type in a query and display a list of 5 books matching that query.
-  *  Each item in the list should include the book's author, title, and publishing company.
-  *  A user should be able to select a book from the five displayed to save to a “Reading List”
-  *  View a “Reading List” with all the books the user has selected from their queries -- this is a local reading list and not tied to Google Books’s account features.
-
 ## Implementation
 
-link to implementation: https://javier123454321.github.io/code_challenge/googlebooksapi.html
+link to implementation: https://javier123454321.github.io/code_challenge/original_submission/googlebooksapi.html
 
 I chose to do it in JavaScript because of my familiarity with the language specifically in regards to doing asynchronous http requests. I gave the UX, only enough attention to make it functional. I decided to go with a graphic application because it made most sense to me to select the divs with all the info by clicking on them. It did cause me to have to resist the urge to make it more visually appealing at every step. I could not, however, resist making the button clicking more interactive, though it is far from pleasant. One thing that I learned in design school is that it is sometimes better not to design something at all than to design it badly for lack of time. I hope that it doesn't hurt my chances here.
 
