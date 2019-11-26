@@ -1,10 +1,10 @@
-function loadBooks() {
+function loadBooks(){
   //Loading the books using an async call
   let query = document.getElementById("query").value;
 
   if (query == "") {
     renderDomId('heading', emptyStringResponse)
-    return
+    return null
   }
 
   clearDomId('query');
@@ -89,3 +89,7 @@ function isBookInList(book, readingList){
   }
 }
 
+module.exports = {
+  isBookInList, 
+  formatQuery,
+};

@@ -1,0 +1,23 @@
+{
+  "name": "code_challenge",
+  "version": "1.0.0",
+  "description": "## requirements for the project Was tasked to create a command line app that accomplished the following   *  This application should allow you to:   *  Type in a query and display a list of 5 books matching that query.   *  Each item in the list should include the book's author, title, and publishing company.   *  A user should be able to select a book from the five displayed to save to a “Reading List”   *  View a “Reading List” with all the books the user has selected from their queries -- this is a local reading list and not tied to Google Books’s account features.",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/javier123454321/code_challenge.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/javier123454321/code_challenge/issues"
+  },
+  "homepage": "https://github.com/javier123454321/code_challenge#readme",
+  "dependencies": {
+    "jest": "^24.9.0"
+  }
+}
