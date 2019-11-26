@@ -5,15 +5,29 @@ html{
 
 body{
     font-family: Arial, Helvetica, sans-serif;
-    
-    max-width: 700px;
     margin: auto;
   }
 .body{
-    padding: 50px 25px;
+    max-width: 900px;
+    padding: 50px 100px;
     margin: 0 auto;
     height: 100%;
     width:90%;
+    background: rgba(46, 46, 46, 0.082)
+  }
+  .body>h3{
+    margin: 0 0 30 0;
+  }
+  .body > div{
+    max-width:700px;
+    margin: auto;
+  }
+  .searchBooks{
+    margin-top: 50px;
+    text-align: center;
+    padding: 10px 0 40px 0;
+    border: solid 1px grey;
+    border-radius: 20px;
   }
   div.entry{
     color: lightgrey;
