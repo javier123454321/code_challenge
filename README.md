@@ -26,6 +26,7 @@ I used the XMLHttpRequest methods for JS because of both my familiarity with tha
 
 Javascript is becoming my favorite language the more that I become familiar with it. It seems to lack precision in regards to floats, and I probably wouldn't use it for computational applications. I really like Java for more robust and precise computations, but to get a quick result on the browser and do simple http requests on a network, JS was a no-brainer for me. I also really like it, as a lot of my thinking is visual, and js with html and css can make something visual with very little overhead.
 
+Current Implementation: https://javier123454321.github.io/code_challenge/googlebooksapi.html
 
 # Initial Submission
 
