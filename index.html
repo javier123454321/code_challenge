@@ -1,0 +1,34 @@
+<html>
+  <head>
+    <title>8th Light - Code Challenge</title>
+  </head>
+  <body>
+    <div class="body">
+      <div class="head">
+      <h1>8th Light Code Challenge | Book Search</h1>
+      <h2>Completed by Javier Gonzalez</h2>
+    </div>
+    
+    <div class="searchBooks">
+      <h3>Use the search bar to look for a book to add to your reading list:</h3>
+    <form id="searchBooksForm" onsubmit="return false;">
+      <input type="text" id="query" placeholder="Search Books">
+      <button id="searchButton" type="submit" name="button" onclick="loadBooks()">Search</button>
+    </form>
+
+    <button type="button" name="displayList" id ="readingListButton" onclick="renderReadingList()">Show Reading List</button>
+  </div>
+  
+    <div id="heading"></div>
+
+    <div id="content"></div>
+
+    <div class="readingListWrapper"></div>
+
+    <script src="src/booksapi.js"></script>
+    <script src="src/renderFunctions.js"></script>
+    
+    <link rel="stylesheet" type="text/css" href="style/master.css">
+  </div>
+  </body>
+</html>

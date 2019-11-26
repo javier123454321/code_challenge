@@ -1,0 +1,73 @@
+html{
+    scroll-behavior: smooth;
+    -webkit-animation: 1s smooth all;
+}
+
+body{
+    font-family: Arial, Helvetica, sans-serif;
+    margin: auto;
+  }
+.body{
+    max-width: 900px;
+    padding: 50px 100px;
+    margin: 0 auto;
+    height: 100%;
+    width:90%;
+  }
+  .body>h3{
+    margin: 0 0 30 0;
+  }
+  .body > div{
+    max-width:700px;
+    margin: auto;
+  }
+  .searchBooks{
+    margin-top: 50px;
+    text-align: center;
+    padding: 10px 0 40px 0;
+    border: solid 1px grey;
+    border-radius: 20px;
+  }
+  div.entry{
+    color: lightgrey;
+    margin-top: 20px;
+    background-color: slategray;
+    padding: 20px;
+    border-radius: 20px;
+
+  }
+  .entry> h4{
+    margin: 0 25px 25px 25px;
+    font-kerning: 4px;
+    font-style: italic;
+    text-align: center;
+  }
+  .wrapper > button{
+      padding: 10px;
+      margin: 10px auto;
+      border: solid 1px white;
+      border-radius: 40px;;
+      background-color: rgb(0,0,0,0);
+      font-weight: 800;
+      color: white;
+  }
+  .wrapper > button:hover{
+    -webkit-animation: 1s smooth all;
+    -moz-animation: 1s smooth all;
+    background-color: rgba(190, 55, 55, 0.527);
+    transform: scale(1.01);
+    box-shadow: silver 0 1px 3px;
+  }
+  .entry > li{
+      list-style: none;
+  }
+  .wrapper{
+      text-align: center;
+      width: 100%;
+  }
+  #heading{
+    text-align: center;
+  }
+  div.readingListWrapper{
+    margin-top: 30px;
+  }
